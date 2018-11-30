@@ -36,12 +36,24 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.send_header("Content-type", "text/html")
             s.end_headers()
         except:
-            info=sys.exc_info()
-            traceback.print_exception(*info)
-            s.send_response(503)
-            s.send_header("Content-type", "text/html")
-            s.end_headers()
- 
+            process_error(s)
+    
+    def do_GET(s):
+        try:
+            s.serve_static()
+        except:
+            process_error(s)
+
+    def serve_static(s):
+        pass
+
+    def process_error(s):
+        info=sys.exc_info()
+        traceback.print_exception(*info)
+        s.send_response(503)
+        s.send_header("Content-type", "text/html")
+        s.end_headers()
+   
 class GraphiteClient():
     def put_event(s, data_lib,config):
         s.sock.sendto("%d:%d|c"%(data_lib['sensor'],data_lib['value']), (config.host,config.graphite_port))
