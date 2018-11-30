@@ -11,13 +11,13 @@ class Config():
         file=open(fname,'r')
         content=file.read()
         settings=json.loads(content)
-    self.servername = settings['servername']
-    self.port_number=settings['port_number']
-    self.host=settings['host']
-    self.user=settings['user']
-    self.password=settings['password']
-    self.database=settings['database']
-    self.graphite_port=settings['graphite_port'] 
+        self.servername = settings['servername']
+        self.port_number=settings['port_number']
+        self.host=settings['host']
+        self.user=settings['user']
+        self.password=settings['password']
+        self.database=settings['database']
+        self.graphite_port=settings['graphite_port'] 
  
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
@@ -36,13 +36,13 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.send_header("Content-type", "text/html")
             s.end_headers()
         except:
-            process_error(s)
+            s.process_error()
     
     def do_GET(s):
         try:
             s.serve_static()
         except:
-            process_error(s)
+            s.process_error()
 
     def serve_static(s):
         pass
@@ -55,12 +55,12 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.end_headers()
    
 class GraphiteClient():
-    def put_event(s, data_lib,config):
+    def put_event(s, data_lib):
         s.sock.sendto("%d:%d|c"%(data_lib['sensor'],data_lib['value']), (config.host,config.graphite_port))
 
     def __init__(s,config):
         s.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        
+	s.config=config
 
 class DBClient:
     def put_event(s,data_lib):
@@ -76,36 +76,35 @@ class DBClient:
 
 
 class DataProcessor:
-    def __init__(s,config,DB,Gl):
-    DB(config)
-    Gl(config)
+    def __init__(s):
+        pass
 
-    def put_event(s,lib,config):
-    DB.put_event(lib)
-    Gl.put_event(lib)
+    def put_event(s,lib):
+        DB.put_event(lib)
+        Gl.put_event(lib)
 
     def close(s):
         DB.close
 
+global data_processor,DB,Gl
 
-config=Config("config_server.txt")
-DB=DBClient 
-Gl=GraphiteClient
-data_processor=DataProcessor(config,DB,Gl) 
+if __name__=="__main__":
+    config=Config("config_server.txt")
+    DB=DBClient(config)
+    Gl=GraphiteClient(config)
 
+    HOST_NAME = config.servername # !!!REMEMBER TO CHANGE THIS!!! 
+    PORT_NUMBER =config.port_number# Maybe set this to 9000. 
 
-HOST_NAME = config.servername # !!!REMEMBER TO CHANGE THIS!!! 
-PORT_NUMBER =config.port_number# Maybe set this to 9000. 
+    server_class=BaseHTTPServer.HTTPServer 
+    httpd = server_class((HOST_NAME, PORT_NUMBER), MyHandler) 
+    print time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER) 
+    try:
+        httpd.serve_forever() 
+    except KeyboardInterrupt:
+        pass 
+    httpd.server_close() 
+    print time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER) 
 
-server_class=BaseHTTPServer.HTTPServer 
-httpd = server_class((HOST_NAME, PORT_NUMBER), MyHandler) 
-print time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER) 
-try:
-    httpd.serve_forever() 
-except KeyboardInterrupt:
-    pass 
-httpd.server_close() 
-print time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER) 
-
-data_processor.close()
-print "sucsess"
+    data_processor.close() 
+    print "sucsessfull"
