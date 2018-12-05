@@ -29,7 +29,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 len=int(s.headers.getheader('content-length'))
                 a=s.rfile.read(len)
                 b=json.loads(a)
-                data_processor.put_event(b)
+                data_processor.put_event(Event(b))
             else:
                 raise "error"
             s.send_response(200)
@@ -53,10 +53,17 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.send_response(503)
         s.send_header("Content-type", "text/html")
         s.end_headers()
-   
+
 class GraphiteClient():
     def put_event(s, data_lib):
-        s.sock.sendto("%d:%d|c"%(data_lib['sensor'],data_lib['value']), (config.host,config.graphite_port))
+        s.sock.sendto("%d.1:%d|c"%(data_lib.ip,data_lib.temperature), (config.host,config.graphite_port))
+        s.sock.sendto("%d.2:%d|c"%(data_lib.ip,data_lib.pressure), (config.host,config.graphite_port))
+        s.sock.sendto("%d.3:%d|c"%(data_lib.ip,data_lib.illumination), (config.host,config.graphite_port))
+        s.sock.sendto("%d.4:%d|c"%(data_lib.ip,data_lib.humidity), (config.host,config.graphite_port))
+        s.sock.sendto("%d.5:%d|c"%(data_lib.ip,data_lib.noise), (config.host,config.graphite_port))
+        s.sock.sendto("%d.6:%d|c"%(data_lib.ip,data_lib.geiger), (config.host,config.graphite_port))
+        s.sock.sendto("%d.7:%d|c"%(data_lib.ip,data_lib.gases), (config.host,config.graphite_port))
+
 
     def __init__(s,config):
         s.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -64,7 +71,7 @@ class GraphiteClient():
 
 class DBClient:
     def put_event(s,data_lib):
-        s.cursor.execute("INSERT INTO events(value,sensor) VALUES (%d,%d);"%(data_lib['value'],data_lib['sensor']))
+        s.cursor.execute("INSERT INTO events(value,sensor) VALUES (1,%d),(2,%d),(3,%d),(4,%d),(5,%d),(6,%d),(7,%d);"%(data_lib.temperature,data_lib.pressure,data_lib.illumination,data_lib.humidity,data_lib.noise,data_lib.geiger,data_lib.gases)
 
     def __init__(s,config):
         s.cnx = mysql.connector.connect(user=config.user,password=config.password,host=config.host,database=config.database)
@@ -74,6 +81,19 @@ class DBClient:
         s.cnx.close()
         s.cursor.close()
 
+class Event:
+    def _init_(s,lib):
+        try:
+            self.temperature =  lib[1]
+            self.humidity = lib[4]
+	    self.pressure =  lib[2]
+	    self.gases = lib[7]
+            self.ip = lib['ip']
+	    self.noise = lib[5]
+	    self.geiger = lib[6]
+	    self.illumination = lib[3]
+	except:
+	    s.process_error()
 
 class DataProcessor:
     def __init__(s):
