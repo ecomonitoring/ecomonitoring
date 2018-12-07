@@ -1,4 +1,5 @@
 import time 
+import date
 import BaseHTTPServer 
 import json 
 import traceback 
@@ -29,7 +30,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 len=int(s.headers.getheader('content-length'))
                 a=s.rfile.read(len)
                 b=json.loads(a)
-                data_processor.put_event(Event(b,s.client_address))
+                data_processor.put_event(Event(b,s.client_address[0]))
             else:
                 raise "error"
             s.send_response(200)
@@ -63,7 +64,7 @@ class GraphiteClient():
 
 class DBClient:
     def put_event(s,event):
-        s.cursor.execute("INSERT INTO events(value,sensor,time) VALUES (%d,%d,%d);"%(event.value,event.sensors[event.name],event.timestamp)
+        s.cursor.execute("INSERT INTO events(value,sensor,date_time,IP) VALUES (%d,%d,%s,%s);"%(event.value,event.sensors[event.name],event.timestamp,event.ip)
     def __init__(s,config):
         s.cnx = mysql.connector.connect(user=config.user,password=config.password,host=config.host,database=config.database)
         s.cursor =s.cnx.cursor()
@@ -77,8 +78,9 @@ class Event:
         self.ip = s.IP
         s.name = lib["name"]
         s.value = lib["value"]
-        s.timestamp = int(time.time())
         s.sensors = {'temperature':1,'pressure':2,'illumination':3,'humidity':4,'noise':5,'geiger':6,'gases':7}
+        s.timestamp=time.asctime()
+
 class DataProcessor:
     def __init__(s):
         pass
