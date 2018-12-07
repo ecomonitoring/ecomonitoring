@@ -67,7 +67,7 @@ class GraphiteClient():
 
     def __init__(s,config):
         s.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	s.config=config
+        s.config=config
 
 class DBClient:
     def put_event(s,data_lib):
