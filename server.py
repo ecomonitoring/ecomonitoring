@@ -86,14 +86,14 @@ class Event:
         try:
             self.temperature =  lib[1]
             self.humidity = lib[4]
-	    self.pressure =  lib[2]
-	    self.gases = lib[7]
+            self.pressure =  lib[2]
+            self.gases = lib[7]
             self.ip = lib['ip']
-	    self.noise = lib[5]
-	    self.geiger = lib[6]
-	    self.illumination = lib[3]
+            self.noise = lib[5]
+            self.geiger = lib[6]
+            self.illumination = lib[3]
 	except:
-	    s.process_error()
+            s.process_error()
 
 class DataProcessor:
     def __init__(s):
