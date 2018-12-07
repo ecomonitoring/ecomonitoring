@@ -29,7 +29,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 len=int(s.headers.getheader('content-length'))
                 a=s.rfile.read(len)
                 b=json.loads(a)
-                data_processor.put_event(Event(b))
+                data_processor.put_event(Event(b,s.client_address))
             else:
                 raise "error"
             s.send_response(200)
@@ -55,24 +55,15 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.end_headers()
 
 class GraphiteClient():
-    def put_event(s, data_lib):
-        s.sock.sendto("%d.1:%d|c"%(data_lib.ip,data_lib.temperature), (config.host,config.graphite_port))
-        s.sock.sendto("%d.2:%d|c"%(data_lib.ip,data_lib.pressure), (config.host,config.graphite_port))
-        s.sock.sendto("%d.3:%d|c"%(data_lib.ip,data_lib.illumination), (config.host,config.graphite_port))
-        s.sock.sendto("%d.4:%d|c"%(data_lib.ip,data_lib.humidity), (config.host,config.graphite_port))
-        s.sock.sendto("%d.5:%d|c"%(data_lib.ip,data_lib.noise), (config.host,config.graphite_port))
-        s.sock.sendto("%d.6:%d|c"%(data_lib.ip,data_lib.geiger), (config.host,config.graphite_port))
-        s.sock.sendto("%d.7:%d|c"%(data_lib.ip,data_lib.gases), (config.host,config.graphite_port))
-
-
+    def put_event(s, event):
+        s.sock.sendto("%d.%d:%d|c"%(event.ip,event.sensors[event.name],event.value), (config.host,config.graphite_port)
     def __init__(s,config):
         s.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.config=config
 
 class DBClient:
-    def put_event(s,data_lib):
-        s.cursor.execute("INSERT INTO events(value,sensor) VALUES (1,%d),(2,%d),(3,%d),(4,%d),(5,%d),(6,%d),(7,%d);"%(data_lib.temperature,data_lib.pressure,data_lib.illumination,data_lib.humidity,data_lib.noise,data_lib.geiger,data_lib.gases)
-
+    def put_event(s,event):
+        s.cursor.execute("INSERT INTO events(value,sensor,time) VALUES (%d,%d,%d);"%(event.value,event.sensors[event.name],event.timestamp)
     def __init__(s,config):
         s.cnx = mysql.connector.connect(user=config.user,password=config.password,host=config.host,database=config.database)
         s.cursor =s.cnx.cursor()
@@ -82,19 +73,12 @@ class DBClient:
         s.cursor.close()
 
 class Event:
-    def _init_(s,lib):
-        try:
-            self.temperature =  lib[1]
-            self.humidity = lib[4]
-            self.pressure =  lib[2]
-            self.gases = lib[7]
-            self.ip = lib['ip']
-            self.noise = lib[5]
-            self.geiger = lib[6]
-            self.illumination = lib[3]
-	except:
-            s.process_error()
-
+    def _init_(s,lib,IP):
+        self.ip = s.IP
+        s.name = lib["name"]
+        s.value = lib["value"]
+        s.timestamp = int(time.time())
+        s.sensors = {'temperature':1,'pressure':2,'illumination':3,'humidity':4,'noise':5,'geiger':6,'gases':7}
 class DataProcessor:
     def __init__(s):
         pass
