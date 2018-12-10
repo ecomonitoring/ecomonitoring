@@ -1,4 +1,5 @@
 import time 
+import date
 import BaseHTTPServer 
 import json 
 import traceback 
@@ -29,7 +30,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 len=int(s.headers.getheader('content-length'))
                 a=s.rfile.read(len)
                 b=json.loads(a)
-                data_processor.put_event(b)
+                data_processor.put_event(Event(b,s.client_address[0]))
             else:
                 raise "error"
             s.send_response(200)
@@ -53,19 +54,17 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.send_response(503)
         s.send_header("Content-type", "text/html")
         s.end_headers()
-   
-class GraphiteClient():
-    def put_event(s, data_lib):
-        s.sock.sendto("%d:%d|c"%(data_lib['sensor'],data_lib['value']), (config.host,config.graphite_port))
 
+class GraphiteClient():
+    def put_event(s, event):
+        s.sock.sendto("%d.%d:%d|c"%(event.ip,event.sensors[event.name],event.value), (config.host,config.graphite_port)
     def __init__(s,config):
         s.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	s.config=config
+        s.config=config
 
 class DBClient:
-    def put_event(s,data_lib):
-        s.cursor.execute("INSERT INTO events(value,sensor) VALUES (%d,%d);"%(data_lib['value'],data_lib['sensor']))
-
+    def put_event(s,event):
+        s.cursor.execute("INSERT INTO events(value,sensor,date_time,IP) VALUES (%d,%d,%s,%s);"%(event.value,event.sensors[event.name],event.timestamp,event.ip)
     def __init__(s,config):
         s.cnx = mysql.connector.connect(user=config.user,password=config.password,host=config.host,database=config.database)
         s.cursor =s.cnx.cursor()
@@ -74,6 +73,13 @@ class DBClient:
         s.cnx.close()
         s.cursor.close()
 
+class Event:
+    def _init_(s,lib,IP):
+        self.ip = s.IP
+        s.name = lib["name"]
+        s.value = lib["value"]
+        s.sensors = {'temperature':1,'pressure':2,'illumination':3,'humidity':4,'noise':5,'geiger':6,'gases':7}
+        s.timestamp=time.asctime()
 
 class DataProcessor:
     def __init__(s):
