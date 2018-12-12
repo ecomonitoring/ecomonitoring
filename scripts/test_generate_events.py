@@ -3,26 +3,26 @@ import random
 
 while True:
         a={}
-        a['value']='temperature'
-        a['sensor']=random.randint(-40,40)
+        a['sensor']='temperature'
+        a['value']=random.randint(-40,40)
         print(json.dumps(a))
-        a['value']='pressure'
-        a['sensor']=random.randint(730,760)
+        a['sensor']='pressure'
+        a['value']=random.randint(730,760)
         print(json.dumps(a))
-        a['value']='illumination'
-        a['sensor']=random.randint(-40,40)
+        a['sensor']='illumination'
+        a['value']=random.randint(-40,40)
         print(json.dumps(a))
-        a['value']='humidity'
-        a['sensor']=random.randint(-40,40)
+        a['sensor']='humidity'
+        a['value']=random.randint(-40,40)
         print(json.dumps(a))
-        a['value']='noise'
-        a['sensor']=random.randint(-40,40)
+        a['sensor']='noise'
+        a['value']=random.randint(-40,40)
         print(json.dumps(a))
-        a['value']='geger'
-        a['sensor']=random.randint(0,210)
+        a['sensor']='geiger'
+        a['value']=random.randint(0,210)
         print(json.dumps(a))
-        a['value']='gases'
-        a['sensor']=random.randint(-40,40)
+        a['sensor']='gases'
+        a['value']=random.randint(-40,40)
         print(json.dumps(a))
 
 

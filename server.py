@@ -1,5 +1,4 @@
 import time 
-import date
 import BaseHTTPServer 
 import json 
 import traceback 
@@ -19,7 +18,7 @@ class Config():
         self.password=settings['password']
         self.database=settings['database']
         self.graphite_port=settings['graphite_port'] 
- 
+        print "Config was read\n"
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_PUT (s):
@@ -30,7 +29,8 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 len=int(s.headers.getheader('content-length'))
                 a=s.rfile.read(len)
                 b=json.loads(a)
-                data_processor.put_event(Event(b,s.client_address[0]))
+                event=Event(b,s.client_address[0])
+                data_processor.put_event(event)
             else:
                 raise "error"
             s.send_response(200)
@@ -38,7 +38,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.end_headers()
         except:
             s.process_error()
-    
+
     def do_GET(s):
         try:
             s.serve_static()
@@ -55,31 +55,38 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.send_header("Content-type", "text/html")
         s.end_headers()
 
-class GraphiteClient():
+class GraphiteClient:
     def put_event(s, event):
-        s.sock.sendto("%d.%d:%d|c"%(event.ip,event.sensors[event.name],event.value), (config.host,config.graphite_port)
-    def __init__(s,config):
+        s.sock.sendto("%s.%d:%d|c"%(event.ip,event.sensors[event.name],event.value), (config.host,config.graphite_port))
+    def __init__(s,conf):
         s.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.config=config
+        s.config=conf
+        print("Graphite connection- OK\n")
 
 class DBClient:
     def put_event(s,event):
-        s.cursor.execute("INSERT INTO events(value,sensor,date_time,IP) VALUES (%d,%d,%s,%s);"%(event.value,event.sensors[event.name],event.timestamp,event.ip)
+        s.cursor.execute(s.add_event,event.event_data)
+
     def __init__(s,config):
-        s.cnx = mysql.connector.connect(user=config.user,password=config.password,host=config.host,database=config.database)
+        s.cnx = mysql.connector.connect(user=config.user,database=config.database,password=config.password,host=config.host)
         s.cursor =s.cnx.cursor()
+        s.add_event=("INSERT INTO events (value,sensor,date_time,IP) VALUES (%s,%s,%s,%s)")
+        print("DB connectin-OK\n")
 
     def close(s):
+        s.cnx.commit()
         s.cnx.close()
         s.cursor.close()
+        print ("DB closed\n")
 
 class Event:
-    def _init_(s,lib,IP):
-        self.ip = s.IP
-        s.name = lib["name"]
+    def __init__(s,lib,IP):
+        s.ip = IP
+        s.name = lib["sensor"]
         s.value = lib["value"]
         s.sensors = {'temperature':1,'pressure':2,'illumination':3,'humidity':4,'noise':5,'geiger':6,'gases':7}
         s.timestamp=time.asctime()
+        s.event_data=(s.value,s.sensors[s.name],s.timestamp,s.ip)
 
 class DataProcessor:
     def __init__(s):
@@ -90,18 +97,19 @@ class DataProcessor:
         Gl.put_event(lib)
 
     def close(s):
-        DB.close
+        DB.close()
 
-global data_processor,DB,Gl
+global data_processor,DB,Gl,event
 
 if __name__=="__main__":
-    config=Config("config_server.txt")
+    config=Config("config_server.json")
+
     DB=DBClient(config)
     Gl=GraphiteClient(config)
-
-    HOST_NAME = config.servername # !!!REMEMBER TO CHANGE THIS!!! 
-    PORT_NUMBER =config.port_number# Maybe set this to 9000. 
-
+    data_processor=DataProcessor()
+    HOST_NAME = config.servername
+    PORT_NUMBER =config.port_number
+    
     server_class=BaseHTTPServer.HTTPServer 
     httpd = server_class((HOST_NAME, PORT_NUMBER), MyHandler) 
     print time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER) 
@@ -112,5 +120,5 @@ if __name__=="__main__":
     httpd.server_close() 
     print time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER) 
 
-    data_processor.close() 
-    print "sucsessfull"
+    data_processor.close
+    print "sucsessfull\n"
