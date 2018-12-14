@@ -68,6 +68,7 @@ class GraphiteClient:
 class DBClient:
     def put_event(s,event):
         s.cursor.execute(s.add_event,event.event_data)
+        s.cnx.commit()
 
     def __init__(s,config):
         s.cnx = mysql.connector.connect(user=config.user,database=config.database,password=config.password,host=config.host)
@@ -76,7 +77,7 @@ class DBClient:
         print("DB connectin-OK\n")
 
     def close(s):
-        s.cnx.commit()
+        #s.cnx.commit()
         s.cnx.close()
         s.cursor.close()
         print ("DB closed\n")
