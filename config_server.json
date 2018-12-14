@@ -1,0 +1,10 @@
+{
+"port_number":8000,
+"servername":"0.0.0.0",
+"host":"10.1.32.54",
+"user":"ecotest",
+"password":"ecotest",
+"database":"ecotest",
+"graphite_port":8125
+}
+
