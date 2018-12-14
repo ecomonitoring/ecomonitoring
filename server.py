@@ -57,7 +57,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 class GraphiteClient:
     def put_event(s, event):
-        sensor_string="%s.%d:%d|c"%(event.ip,event.sensors[event.name],event.value)
+        sensor_string="events.%s.%d:%d|c"%(event.ip.replace(".", "_"),event.name,event.value)
         print sensor_string
         s.sock.sendto(sensor_string, (config.host,config.graphite_port))
     def __init__(s,conf):
