@@ -57,7 +57,9 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
 class GraphiteClient:
     def put_event(s, event):
-        s.sock.sendto("%s.%d:%d|c"%(event.ip,event.sensors[event.name],event.value), (config.host,config.graphite_port))
+        sensor_string="%s.%d:%d|c"%(event.ip,event.sensors[event.name],event.value)
+        print sensor_string
+        s.sock.sendto(sensor_string, (config.host,config.graphite_port))
     def __init__(s,conf):
         s.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.config=conf
@@ -120,5 +122,5 @@ if __name__=="__main__":
     httpd.server_close() 
     print time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER) 
 
-    data_processor.close
+    data_processor.close()
     print "sucsessfull\n"
