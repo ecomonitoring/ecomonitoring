@@ -1,5 +1,9 @@
+#!/usr/bin/python -u
+
 import json
 import random
+import time
+import sys
 
 while True:
         a={}
@@ -24,6 +28,8 @@ while True:
         a['sensor']='gases'
         a['value']=random.randint(-40,40)
         print(json.dumps(a))
+        sys.stdout.flush()
+        time.sleep(1) #REMEMBER
 
 
 
