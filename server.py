@@ -31,6 +31,18 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 b=json.loads(a)
                 event=Event(b,s.client_address[0])
                 data_processor.put_event(event)
+            elif s.path=="/add_data/1_1":
+                pass
+            elif s.path=="/add_data/1_2":
+                pass
+            elif s.path=="/add_data/2_1":
+                pass
+            elif s.path=="/add_data/2_2":
+                pass
+            elif s.path=="/add_data/3_1":
+                pass
+            elif s.path=="/add_data/3_2":
+                pass
             else:
                 raise "error"
             s.send_response(200)
@@ -40,10 +52,38 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.process_error()
 
     def do_GET(s):
-        try:
-            s.serve_static()
-        except:
-            s.process_error()
+        fname = s.path.split('/')[-1]
+        with open(fname, "r") as file:
+            s.send_response(200)
+            if fname.endswith(".html"):
+                s.send_header("Content-type", "text/html")
+
+            elif fname.endswith(".js"):
+                s.send_header("Content-type", "text/javascript")
+
+            elif fname.endswith(".css"):
+                s.send_header("Content-type", "text/css")
+            else:
+                s.send_header("Content-type", "text/php")
+            s.end_headers()
+            s.wfile.write(file.read())
+
+    def do_POST(s):
+        l=int(s.headers.getheader('content-length'))
+        content=s.rfile.read(l)
+        
+        
+        
+        
+        
+        
+        
+        
+        s.send_response(200)
+        s.send_header("Content-type", "application/json")
+        s.end_headers()
+        s.wfile.write(content)
+
 
     def serve_static(s):
         pass
