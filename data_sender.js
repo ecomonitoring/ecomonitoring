@@ -56,6 +56,11 @@ function sender(data, url) {
 	x.send(data);
 	}
 
+function data_cheker(dict, id){
+
+  return;
+}
+
 function data_former(form_id){
 	var form=document.getElementById(form_id);
 	var formData=new FormData(form);
@@ -63,7 +68,12 @@ function data_former(form_id){
 	formData.forEach(function(k,v){
 		output[k]=v;
 		});
-	return output;
+	if (data_cheker(output, form_id)==0)  return output;
+	else 
+	{
+		alert("Неправильный ввод данных");
+		return;
+	}
 }
 
 function ChooseClose(name){

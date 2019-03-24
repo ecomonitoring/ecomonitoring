@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="elements.js"></script>
-  <script src="data_sender.js"></script>
-  <link rel="stylesheet" type="text/css" href="data_sender_style.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="elements.js"></script>
+<script src="data_sender.js"></script>
+<link rel="stylesheet" type="text/css" href="data_sender_style.css">
 </head>
 <body>
 
-<h2>Риск KOR©</h2>
-<p>Выберите нужную среду:</p>
+<div id="head">
+  <font>
+    Калькулятор Рисков
+  </font>
+  <img src="logo.png">
+</div>
 
 <div class="tab">
+  <p>Выберите нужную среду:</p>
   <button class="tablinks" onclick="openEnviroment(event, 'Подземные воды')" id="defaultOpen">Подземные воды</button>
   <button class="tablinks" onclick="openEnviroment(event, 'Поверхностные воды')">Поверхностные воды</button>
   <button class="tablinks" onclick="openEnviroment(event, 'Почва')">Почва</button>
@@ -20,368 +25,376 @@
 
 <div id="Подземные воды" class="tabcontent">
   <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
-  <h3>Подземные воды</h3>
   <p>
-  <table align="center" border =1 style="width:100%">
+  <table align="top" border =1 style="width:100%">
   <tr>
-	<th colspan="2">Воздействие на население</th>
-	</tr>
-	<tr>
-	<td>
-	<center>
-	<div> Накожно</div>
-	</td>
-	<td>
-	<center>
-	<div> Перорально </div>
-	</td>
-	</tr>
-	<tr>
-	<td>
-		 <form id="11" method="post">
+    <th colspan="2" align="center">Воздействие на население</th>
+    </tr>
+    <tr>
+    <td>
+    <center>
+    <div> Накожно</div>
+    </td>
+    <td>
+    <center>
+    <div> Перорально </div>
+    </td>
+    </tr>
+    <tr>
+    <td>
+         <form id="11" method="post">
+    <div class="forma">
+    <br></br>
+      <input autocomplete="off" name="elem" type="text" onclick="Opener('content1_1','Inp1_1');" placeholder="Начинайте вводить вещество" class="myInput" id="Inp1_1" onkeyup="filterFunction()">
+      <div id="content1_1"></div>
     <div>
 	<br></br>
-	  <input type="text" onclick="Opener('content1_1','Inp1_1');" placeholder="Search.." id="Inp1_1" onkeyup="filterFunction()">
-	  <div id="content1_1"></div>
-	<br></br>
       <label for="concentration">Концентрация, мг/л</label>
-      <input type="text" name="concentration" align="center" required>
+      <input autocomplete="off" type="text" name="concentration" align="center" required>
+    </div>
+	<br></br>
+    <div>
+      <label for="et_child">Время воздействия (ребенок), ч/день</label>
+      <input autocomplete="off" type="text" name="et_child" required>
+    </div>
+    <br></br>    
+    <div>
+      <label for="et_adult">Время воздействия (взрослый), ч/день</label>
+      <input autocomplete="off" type="text" name="et_adult" required>
+    </div>
+        <br></br>
+    <div>
+      <label for="ef_child">Частота воздействия (ребенок), случаи(дни)/год</label>
+      <input autocomplete="off" type="text" name="ef_child" required>
+    </div>
+    <br></br>
+    <div>
+      <label for="ef_adult">Частота воздействия (взрослый), случаи(дни)/год</label>
+      <input autocomplete="off" type="text" name="ef_adult" required>
+    </div>
+        <br></br>
+    <div>
+      <label for="ed">Длительность воздействия, годы</label>
+      <input autocomplete="off" type="text" name="ed" required>
+    </div>
+        <br></br>
+    <div>
+      <label for="popl_child">Количество детей, человек</label>
+      <input autocomplete="off" type="text" name="popl_child" required>
+    </div>
+        <br></br>
+    <div>
+      <label for="popl_adult">Количество взрослых, человек</label>
+      <input autocomplete="off" type="text" name="popl_adult" required>
+    </div>
+    <br></br>
+    <div>
+      <div class="select-arrow"></div> 
+    </div> 
+    <button class="sender" type="button" onclick="data_sender('11','/add_data/1_1');">Отправить</button> 
+  </form> 
+</div>
+    </td>    
+    <td>
+     <form id="12" method="post">
+    <div class="forma">
+    <br></br>
+      <input autocomplete="off" name="elem" type="text" onclick="Opener('content1_2', 'Inp1_2');" required placeholder="Начинайте вводить вещество" class="myInput" id="Inp1_2" onkeyup="filterFunction()">
+      <div id="content1_2"></div>
     <br></br>
 	<div>
-      <label for="et_child">Время воздействия (ребенок), ч/день</label>
-      <input type="text" name="et_child" required>
+      <label for="concentration">Концентрация, мг/л</label>
+      <input autocomplete="off" type="text" name="concentration" align="center" required>
     </div>
 	<br></br>    
-	<div>
-      <label for="et_adult">Время воздействия (взрослый), ч/день</label>
-      <input type="text" name="et_adult" required>
-    </div>
-	    <br></br>
     <div>
-      <label for="ef_child">Частота воздействия (ребенок), случаи(дни)/год</label>
-      <input type="text" name="ef_child" required>
-    </div>
-	<br></br>
-    <div>
-      <label for="ef_adult">Частота воздействия (взрослый), случаи(дни)/год</label>
-      <input type="text" name="ef_adult" required>
-    </div>
-	    <br></br>
-    <div>
-      <label for="ed">Длительность воздействия, годы</label>
-      <input type="text" name="ed" required>
-    </div>
-	    <br></br>
-    <div>
-      <label for="popl_child">Количество детей, человек</label>
-      <input type="text" name="popl_child" required>
-    </div>
-	    <br></br>
-    <div>
-      <label for="popl_adult">Количество взрослых, человек</label>
-      <input type="text" name="popl_adult" required>
-    </div>
-	<br></br>
-    <div>
-      <div class="select-arrow"></div> 
-    </div> 
-    <button type="button" onclick="data_sender('11','/add_data/1_1');">Отправить</button> 
-  </form> 
-</div>
-	</td>    
-	<td>
-	 <form id="12" method="post">
-    <div>
-	<br></br>
-      <input type="text" onclick="Opener('content1_2', 'Inp1_2');" required placeholder="Search.." id="Inp1_2" onkeyup="filterFunction()">
-	  <div id="content1_2"></div>
-	<br></br>
-      <label for="concentration">Концентрация, мг/л</label>
-      <input type="text" name="concentration" align="center" required>
-    <br></br>    
-	<div>
       <label for="ir_child">Время водопотребления (ребенок), л/день</label>
-      <input type="text" name="ir_child" required>
+      <input autocomplete="off" type="text" name="ir_child" required>
     </div>
-	    <br></br>    
-	<div>
+        <br></br>    
+    <div>
       <label for="ir_adult">Время водопотребления (взрослый), л/день</label>
-      <input type="text" name="ir_adult" required>
+      <input autocomplete="off" type="text" name="ir_adult" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="ef_child">Частота воздействия (ребенок), случаи(дни)/год</label>
-      <input type="text" name="ef_child" required>
+      <input autocomplete="off" type="text" name="ef_child" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="ef_adult">Частота воздействия (взрослый), случаи(дни)/год</label>
-      <input type="text" name="ef_adult" required>
+      <input autocomplete="off" type="text" name="ef_adult" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="ed">Длительность воздействия, годы</label>
-      <input type="text" name="ed" required>
+      <input autocomplete="off" type="text" name="ed" required>
     </div>
-		    <br></br>
+            <br></br>
     <div>
       <label for="popl_child">Количество детей, человек</label>
-      <input type="text" name="popl_child" required>
+      <input autocomplete="off" type="text" name="popl_child" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="popl_adult">Количество взрослых, человек</label>
-      <input type="text" name="popl_adult" required>
+      <input autocomplete="off" type="text" name="popl_adult" required>
     </div>
-	<br></br>
+    <br></br>
     <div>
       <div class="select-arrow"></div> 
     </div> 
-    <button type="button" onclick="data_sender('12','/add_data/1_2');">Отправить</button> 
+    <button class="sender" type="button" onclick="data_sender('12','/add_data/1_2');">Отправить</button> 
   </form> 
 </div>
-	</td>
-	</tr>
+    </td>
+    </tr>
   </table>
   </p>
 </div>
 
 <div id="Поверхностные воды" class="tabcontent">
   <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
-  <h3>Поверхностные воды</h3>
     <p>
   <table align="center" border =1 style="width:100%">
   <tr>
-	<th colspan="2">Воздействие на население</th>
-	</tr>
-	<tr>
-	<td>
-	<center>
-	<div> Накожно</div>
-	</td>
-	<td>
-	<center>
-	<div> Перорально </div>
-	</td>
-	</tr>
-	<tr>
-	<td>
-		 <form id="21" method="post">
+    <th colspan="2" align="center">Воздействие на население</th>
+    </tr>
+    <tr>
+    <td>
+    <center>
+    <div> Накожно</div>
+    </td>
+    <td>
+    <center>
+    <div> Перорально </div>
+    </td>
+    </tr>
+    <tr>
+    <td>
+         <form id="21" method="post">
+    <div class="forma">
+    <br></br>
+      <input autocomplete="off" type="text" name="elem" onclick="Opener('content2_1','Inp2_1');" required placeholder="Начинайте вводить вещество" class="myInput" id="Inp2_1" onkeyup="filterFunction()">
+      <div id="content2_1"></div>
     <div>
-	<br></br>
-	  <input type="text" onclick="Opener('content2_1','Inp2_1');" required placeholder="Search.." id="Inp2_1" onkeyup="filterFunction()">
-	  <div id="content2_1"></div>
 	<br></br>
       <label for="concentration">Концентрация, мг/л</label>
-      <input type="text" name="concentration" align="center" required>
-    <br></br>    
-	<div>
-      <label for="et_child">Время воздействия (ребенок), ч/день</label>
-      <input type="text" name="et_child" required>
+      <input autocomplete="off" type="text" name="concentration" align="center" required>
     </div>
 	<br></br>    
-	<div>
-      <label for="et_adult">Время воздействия (взрослый), ч/день</label>
-      <input type="text" name="et_adult" required>
+    <div>
+      <label for="et_child">Время воздействия (ребенок), ч/день</label>
+      <input autocomplete="off" type="text" name="et_child" required>
     </div>
-	    <br></br>
+    <br></br>    
+    <div>
+      <label for="et_adult">Время воздействия (взрослый), ч/день</label>
+      <input autocomplete="off" type="text" name="et_adult" required>
+    </div>
+        <br></br>
     <div>
       <label for="ef_child">Частота воздействия (ребенок), случаи(дни)/год</label>
-      <input type="text" name="ef_child" required>
+      <input autocomplete="off" type="text" name="ef_child" required>
     </div>
-	<br></br>
+    <br></br>
     <div>
       <label for="ef_adult">Частота воздействия (взрослый), случаи(дни)/год</label>
-      <input type="text" name="ef_adult" required>
+      <input autocomplete="off" type="text" name="ef_adult" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="ed">Длительность воздействия, годы</label>
-      <input type="text" name="ed" required>
+      <input autocomplete="off" type="text" name="ed" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="popl_child">Количество детей, человек</label>
-      <input type="text" name="popl_child" required>
+      <input autocomplete="off" type="text" name="popl_child" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="popl_adult">Количество взрослых, человек</label>
-      <input type="text" name="popl_adult" required>
+      <input autocomplete="off" type="text" name="popl_adult" required>
     </div>
-	<br></br>
+    <br></br>
     <div>
       <div class="select-arrow"></div> 
     </div> 
-    <button type="button" onclick="datasender('21','/add_data/2_1');">Отправить</button> 
+    <button class="sender" type="button" onclick="data_sender('21','/add_data/2_1');">Отправить</button> 
   </form> 
 </div>
-	</td>    
-	<td>
-	 <form id="22" align="up" method="post">
+    </td>    
+    <td>
+     <form id="22" align="up" method="post">
+    <div class="forma">
+    <br></br>
+      <input autocomplete="off" type="text" name="elem" onclick="Opener('content2_2','Inp2_2');" required placeholder="Начинайте вводить вещество" class="myInput" id="Inp2_2" onkeyup="filterFunction()">
+      <div id="content2_2"></div>
     <div>
-	<br></br>
-	  <input type="text" onclick="Opener('content2_2','Inp2_2');" required placeholder="Search.." id="Inp2_2" onkeyup="filterFunction()">
-	  <div id="content2_2"></div>
 	<br></br>
       <label for="concentration">Концентрация, мг/л</label>
-      <input type="text" name="concentration" align="center" required>
-    <br></br>
-    <br></br>
-    <div>
-      <label for="ef_child">Частота воздействия (ребенок), случаи(дни)/год</label>
-      <input type="text" name="ef_child" required>
-    </div>
-	    <br></br>
-    <div>
-      <label for="ef_adult">Частота воздействия (взрослый), случаи(дни)/год</label>
-      <input type="text" name="ef_adult" required>
-    </div>
-	    <br></br>
-    <div>
-      <label for="ed">Длительность воздействия, годы</label>
-      <input type="text" name="ed" required>
-    </div>
-		    <br></br>
-    <div>
-      <label for="popl_child">Количество детей, человек</label>
-      <input type="text" name="popl_child" required>
-    </div>
-	    <br></br>
-    <div>
-      <label for="popl_adult">Количество взрослых, человек</label>
-      <input type="text" name="popl_adult" required>
+      <input autocomplete="off" type="text" name="concentration" align="center" required>
     </div>
 	<br></br>
+    <div>
+      <label for="ef_child">Частота воздействия (ребенок), случаи(дни)/год</label>
+      <input autocomplete="off" type="text" name="ef_child" required>
+    </div>
+        <br></br>
+    <div>
+      <label for="ef_adult">Частота воздействия (взрослый), случаи(дни)/год</label>
+      <input autocomplete="off" type="text" name="ef_adult" required>
+    </div>
+        <br></br>
+    <div>
+      <label for="ed">Длительность воздействия, годы</label>
+      <input autocomplete="off" type="text" name="ed" required>
+    </div>
+            <br></br>
+    <div>
+      <label for="popl_child">Количество детей, человек</label>
+      <input autocomplete="off" type="text" name="popl_child" required>
+    </div>
+        <br></br>
+    <div>
+      <label for="popl_adult">Количество взрослых, человек</label>
+      <input autocomplete="off" type="text" name="popl_adult" required>
+    </div>
+    <br></br>
     <div>
       <div class="select-arrow"></div> 
     </div>
-    <button onclick="data_sender('22','/add_data/2_2');" type="button">Отправить</button> 
+    <button class="sender" onclick="data_sender('22','/add_data/2_2');" type="button">Отправить</button> 
   </form> 
 </div>
-	</td>
-	</tr>
+    </td>
+    </tr>
   </table>
   </p> 
 </div>
 
 <div id="Почва" class="tabcontent">
   <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
-  <h3>Почва</h3>
   <p>  <table align="center" border =1 style="width:100%">
   <tr>
-	<th colspan="2">Воздействие на население</th>
-	</tr>
-	<tr>
-	<td>
-	<center>
-	<div> Накожно</div>
-	</td>
-	<td>
-	<center>
-	<div> Перорально </div>
-	</td>
-	</tr>
-	<tr>
-	<td>
-		 <form id="31" method="post">
-    <div>
-	<br></br>
-	  <input type="text" onclick="Opener('content3_1', 'Inp3_1');" placeholder="Search.." id="Inp3_1" onkeyup="filterFunction()">
-	  <div id="content3_1"></div>
-	<br></br>
-      <label for="concentration">Концентрация, мг/кг</label>
-      <input type="text" name="concentration" align="center" required>
-    <br></br>    
+    <th colspan="2" align="center">Воздействие на население</th>
+    </tr>
+    <tr>
+    <td>
+    <center>
+    <div> Накожно</div>
+    </td>
+    <td>
+    <center>
+    <div> Перорально </div>
+    </td>
+    </tr>
+    <tr>
+    <td>
+         <form id="31" method="post">
+    <div class="forma">
+    <br></br>
+      <input autocomplete="off" type="text" name="elem" onclick="Opener('content3_1', 'Inp3_1');" placeholder="Начинайте вводить вещество" class="myInput" id="Inp3_1" onkeyup="filterFunction()">
+      <div id="content3_1"></div>
+    <br></br>
 	<div>
-      <label for="et_child">Время воздействия (ребенок), ч/день</label>
-      <input type="text" name="et_child" required>
+      <label for="concentration">Концентрация, мг/кг</label>
+      <input autocomplete="off" type="text" name="concentration" align="center" required>
     </div>
 	<br></br>    
-	<div>
-      <label for="et_adult">Время воздействия (взрослый), ч/день</label>
-      <input type="text" name="et_adult" required>
+    <div>
+      <label for="et_child">Время воздействия (ребенок), ч/день</label>
+      <input autocomplete="off" type="text" name="et_child" required>
     </div>
-	    <br></br>
+    <br></br>    
+    <div>
+      <label for="et_adult">Время воздействия (взрослый), ч/день</label>
+      <input autocomplete="off" type="text" name="et_adult" required>
+    </div>
+        <br></br>
     <div>
       <label for="ef_child">Частота воздействия (ребенок), случаи(дни)/год</label>
-      <input type="text" name="ef_child" required>
+      <input autocomplete="off" type="text" name="ef_child" required>
     </div>
-	<br></br>
+    <br></br>
     <div>
       <label for="ef_adult">Частота воздействия (взрослый), случаи(дни)/год</label>
-      <input type="text" name="ef_adult" required>
+      <input autocomplete="off" type="text" name="ef_adult" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="ed">Длительность воздействия, годы</label>
-      <input type="text" name="ed" required>
+      <input autocomplete="off" type="text" name="ed" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="popl_child">Количество детей, человек</label>
-      <input type="text" name="popl_child" required>
+      <input autocomplete="off" type="text" name="popl_child" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="popl_adult">Количество взрослых, человек</label>
-      <input type="text" name="popl_adult" required>
+      <input autocomplete="off" type="text" name="popl_adult" required>
     </div>
-	<br></br>
+    <br></br>
     <div>
       <div class="select-arrow"></div> 
     </div> 
-    <button type="button" onclick="data_sender('31','/add_data/3_1');">Отправить</button> 
+    <button class="sender" type="button" onclick="data_sender('31','/add_data/3_1');">Отправить</button> 
   </form> 
 </div>
-	</td>    
-	<td>
-	 <form id="32" method="post">
-    <div>
-	<br></br>
-	  <input type="text" onclick="Opener('content3_2','Inp3_2');" placeholder="Search.." id="Inp3_2" onkeyup="filterFunction()">
-	  <div id="content3_2"></div>
-	<br></br>
+    </td>    
+    <td>
+     <form id="32" method="post">
+    <div class="forma">
+    <br></br>
+      <input autocomplete="off" type="text" name="elem" onclick="Opener('content3_2','Inp3_2');" placeholder="Начинайте вводить вещество" class="myInput" id="Inp3_2" onkeyup="filterFunction()">
+      <div id="content3_2"></div>
+    <br></br>
+	<div>
       <label for="concentration">Концентрация, мг/л</label>
-      <input type="text" name="concentration" align="center" required>
-    <br></br>    
+      <input autocomplete="off" type="text" name="concentration" align="center" required>
+    </div>
+	<br></br>    
     <div>
       <label for="ef_child">Частота воздействия (ребенок), случаи(дни)/год</label>
-      <input type="text" name="ef_child" required>
+      <input autocomplete="off" type="text" name="ef_child" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="ef_adult">Частота воздействия (взрослый), случаи(дни)/год</label>
-      <input type="text" name="ef_adult" required>
+      <input autocomplete="off" type="text" name="ef_adult" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="ed">Длительность воздействия, годы</label>
-      <input type="text" name="ed" required>
+      <input autocomplete="off" type="text" name="ed" required>
     </div>
-		    <br></br>
+            <br></br>
     <div>
       <label for="popl_child">Количество детей, человек</label>
-      <input type="text" name="popl_child" required>
+      <input autocomplete="off" type="text" name="popl_child" required>
     </div>
-	    <br></br>
+        <br></br>
     <div>
       <label for="popl_adult">Количество взрослых, человек</label>
-      <input type="text" name="popl_adult" required>
+      <input autocomplete="off" type="text" name="popl_adult" required>
     </div>
-	<br></br>
+    <br></br>
     <div>
       <div class="select-arrow"></div> 
     </div>
-    <button type="button" onclick="data_sender('32','/add_data/3_2');" >Отправить</button> 
+    <button class="sender" type="button" onclick="data_sender('32','/add_data/3_2');" >Отправить</button> 
   </form> 
 </div>
-	</td>
-	</tr>
+    </td>
+    </tr>
   </table></p>
 </div>
 
-	  <div id="Elements" class="dropdown-content">	  </div>
+      <div id="Elements" class="dropdown-content">    </div>
 
 </body>
 </html>
