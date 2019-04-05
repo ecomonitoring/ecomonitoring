@@ -5,7 +5,7 @@ window.onload = function(){
 	var string='';
 	for (var i = 0; i < 856; i++)
 	{
-		string += '<a onclick="ChooseClose(\'' + substance[i]+'\');">' + substance[i] +'</a>';
+		string += '<a onclick="ChooseClose(\'' + substance[i]+ '\','+ i +');">' + substance[i] +'</a>';
 	}
 	search_items.innerHTML = string;
 	return;
@@ -40,6 +40,7 @@ function openEnviroment(evt, enviromentName) {
 
 function data_sender(id, url) {
 	var data=data_former(id);
+	console.log(data);
 	sender(data,url);
 	return;
 }
@@ -58,7 +59,7 @@ function sender(data, url) {
 
 function data_cheker(dict, id){
 
-  return;
+  return 0;
 }
 
 function data_former(form_id){
@@ -72,12 +73,14 @@ function data_former(form_id){
 	else 
 	{
 		alert("Неправильный ввод данных");
-		return;
+		return output;
 	}
 }
 
-function ChooseClose(name){
+function ChooseClose(name, key){
+	var elem_id="Id"+inp_id;
 	console.log(name);
+	document.getElementById(elem_id).value=key;
 	document.getElementById(inp_id).value=name;
 	document.getElementById('Elements').classList.toggle("show");
 }
