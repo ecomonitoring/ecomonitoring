@@ -16,7 +16,8 @@ class Config():
         self.port_number=settings['port_number']
         self.host=settings['host']
         self.user=settings['user']
-        self.password=settings['password']
+ls
+       self.password=settings['password']
         self.database=settings['database']
         self.graphite_port=settings['graphite_port']
         print "Config was read\n"
@@ -34,11 +35,11 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 data_processor.put_event(event)
 
             elif s.path == "/add_data/1_1":
-                len = int(s.headers.getheader('content-length'))
-                a = s.rfile.read(len)
-                data = json.loads(a)
-                DB.risc1_1(data['elem_id'], data['concentration'], data['et_child'], data['et_adult'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
-                
+               # len = int(s.headers.getheader('content-length'))
+               # a = s.rfile.read(len)
+                #data = json.loads(a)
+                #risc = dermwat() 
+                pass
 
             elif s.path=="/add_data/1_2":
                 pass
@@ -83,6 +84,14 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_POST(s):
         l=int(s.headers.getheader('content-length'))
         content=s.rfile.read(l)
+        
+        
+        
+        
+        
+        
+        
+        
         s.send_response(200)
         s.send_header("Content-type", "application/json")
         s.end_headers()
@@ -112,11 +121,6 @@ class GraphiteClient:
 class DBClient:
     def put_event(s,event):
         s.cursor.execute(s.add_event,event.event_data)
-        s.cnx.commit()
-
-    def risc1_1(s, id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo):
-	add_1_1=("INSERT INTO Underground_water_skin (Elem_ID, Concentration, Child_Time, Adult_Time, Child_Cases, Adult_Cases, Duration, Child_Count, Adult_Count) VALUES (%d,%lf,%lf,%lf,%d,%d,%lf,%d,%d)")
-        s.cursor.execute(add_1_1,id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo)
         s.cnx.commit()
 
     def __init__(s,config):
