@@ -23,6 +23,7 @@
   <button class="tablinks" onclick="openEnviroment(event, 'Почва')">Почва</button>
 </div>
 
+
 <div id="Подземные воды" class="tabcontent">
   <span onclick="this.parentElement.style.display='none'" class="topright">&times</span>
   <p>
@@ -43,7 +44,7 @@
     <tr>
     <td>
          <form id="11" method="post">
-    <div class="forma">
+    <div class="forma" id ="div1_1">
     <br></br>
       <input autocomplete="off" name="elem" type="text" onclick="Opener('content1_1','Inp1_1');" placeholder="Начинайте вводить вещество" class="myInput" id="Inp1_1" onkeyup="filterFunction()">
       <div id="content1_1"></div>
@@ -93,13 +94,37 @@
       <div class="select-arrow"></div> 
     </div> 
     <button class="sender" type="button" onclick="data_sender('11','/add_data/1_1');">Отправить</button> 
-  </form> 
+  </form>
+  <table class ="result">
+    <tr>
+      <td> </td>
+      <td>Для ребёнка</td>
+      <td>Для взрослого</td>
+    </tr>
+    <tr>
+      <td>Поглощенная доза</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Индекс опасности неканцерогенного риска</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Индивидуальный канцерогенный риск</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Канцерогенный риск для населения</td>
+    </tr>
+  </table>
+  
+
 </div>
     </td>    
     <td>
      <form id="12" method="post">
-    <div class="forma">
-    <br></br>
+    <div class="forma" id="div1_2"> 
+   <br></br>
       <input autocomplete="off" name="elem" type="text" onclick="Opener('content1_2', 'Inp1_2');" required placeholder="Начинайте вводить вещество" class="myInput" id="Inp1_2" onkeyup="filterFunction()">
       <div id="content1_2"></div>
       <input type="hidden" name="elem_id" id="IdInp1_2">
@@ -176,7 +201,7 @@
     <tr>
     <td>
          <form id="21" method="post">
-    <div class="forma">
+    <div class="forma" id="div2_1">
     <br></br>
       <input autocomplete="off" type="text" name="elem" onclick="Opener('content2_1','Inp2_1');" required placeholder="Начинайте вводить вещество" class="myInput" id="Inp2_1" onkeyup="filterFunction()">
       <div id="content2_1"></div>
@@ -231,7 +256,7 @@
     </td>    
     <td>
      <form id="22" align="up" method="post">
-    <div class="forma">
+    <div class="forma" id="div2_2">
     <br></br>
       <input autocomplete="off" type="text" name="elem" onclick="Opener('content2_2','Inp2_2');" required placeholder="Начинайте вводить вещество" class="myInput" id="Inp2_2" onkeyup="filterFunction()">
       <div id="content2_2"></div>
@@ -298,7 +323,7 @@
     <tr>
     <td>
          <form id="31" method="post">
-    <div class="forma">
+    <div class="forma" id ="div3_1">
     <br></br>
       <input autocomplete="off" type="text" name="elem" onclick="Opener('content3_1', 'Inp3_1');" placeholder="Начинайте вводить вещество" class="myInput" id="Inp3_1" onkeyup="filterFunction()">
       <div id="content3_1"></div>
@@ -353,7 +378,7 @@
     </td>    
     <td>
      <form id="32" method="post">
-    <div class="forma">
+    <div class="forma" id="div3_2">
     <br></br>
       <input autocomplete="off" type="text" name="elem" onclick="Opener('content3_2','Inp3_2');" placeholder="Начинайте вводить вещество" class="myInput" id="Inp3_2" onkeyup="filterFunction()">
       <div id="content3_2"></div>

@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 import time
 import BaseHTTPServer
 import json
@@ -5,7 +6,7 @@ import traceback
 import sys
 import mysql.connector
 import socket
-
+import risk as myModule
 
 class Config():
     def __init__(self, fname):
@@ -22,6 +23,24 @@ class Config():
         print "Config was read\n"
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+    def send_answer(s, data, eid):
+        cnx = mysql.connector.connect(user=config.user,database=config.database,password=config.password,host=config.host)
+        cursor = cnx.cursor()
+        cursor.execute("select value from limits where id =" + eid + ";")
+
+        for (value) in cursor:
+            data["norm_conc"] = value
+            print value
+
+        s.send_response(200)
+        s.send_header("Content-type", "application/json")
+        s.end_headers()
+        print json.dumps(data)
+        s.wfile.write(json.dumps(data))
+
+        cursor.close()
+        cnx.close()
+
     def do_PUT (s):
         try:
             """Respond to a PUT request."""
@@ -38,22 +57,54 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 a = s.rfile.read(len)
                 data = json.loads(a)
                 DB.risc1_1(data['elem_id'], data['concentration'], data['et_child'], data['et_adult'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
-                
+                r = counter(1, 1, data['concentration'], data['et_child'], data['et_adult'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
+                r['pid'] = "div1_1"
+                s.send_answer(r, data['elem_id'])
 
             elif s.path=="/add_data/1_2":
-                pass
+                len = int(s.headers.getheader('content-length'))
+                a = s.rfile.read(len)
+                data = json.loads(a)
+                DB.risc1_2(data['elem_id'], data['concentration'], data['ir_child'], data['ir_adult'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
+                r = counter(1, 2, data['concentration'], data['et_child'], data['et_adult'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
+                r['pid'] = "div1_2"
+                s.send_answer(r, data['elem_id'])
 
             elif s.path=="/add_data/2_1":
-                pass
+                len = int(s.headers.getheader('content-length'))
+                a = s.rfile.read(len)
+                data = json.loads(a)
+                DB.risc2_1(data['elem_id'], data['concentration'], data['et_child'], data['et_adult'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
+                r = counter(2, 1, data['concentration'], data['et_child'], data['et_adult'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
+                r['pid'] = "div2_1"
+                s.send_answer(r, data['elem_id'])
 
             elif s.path=="/add_data/2_2":
-                pass
+                len = int(s.headers.getheader('content-length'))
+                a = s.rfile.read(len)
+                data = json.loads(a)
+                DB.risc2_2(data['elem_id'], data['concentration'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
+                r = counter(2, 2, data['concentration'], 0, 0, data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
+                r['pid'] = "div2_2"
+                s.send_answer(r, data["elem_id"])
 
             elif s.path=="/add_data/3_1":
-                pass
+                len = int(s.headers.getheader('content-length'))
+                a = s.rfile.read(len)
+                data = json.loads(a)
+                DB.risc3_1(data['elem_id'], data['concentration'], data['et_child'], data['et_adult'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
+                r = counter(3, 1, data['concentration'], data['et_child'], data['et_adult'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
+                r['pid'] = "div3_1"
+                s.send_answer(r, data['elem_id'])
 
             elif s.path=="/add_data/3_2":
-                pass
+                len = int(s.headers.getheader('content-length'))
+                a = s.rfile.read(len)
+                data = json.loads(a)
+                DB.risc3_2(data['elem_id'], data['concentration'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
+                r = counter(1, 1, data['concentration'], 0, 0, data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
+                r['pid'] = "div3_2"
+                s.send_answer(r, data["elem_id"])
 
             else:
                 raise "error"
@@ -99,6 +150,12 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.send_header("Content-type", "text/html")
         s.end_headers()
 
+def counter(a, b, concentration, et_child, et_adult, ef_child, ef_adult, ed, popl_child, popl_adult):
+        q = myModule.risk();
+        risk = myModule.Count(a, b, float(concentration), float(et_child), float(et_adult), float(ef_child), float(ef_adult), float(ed), float(popl_child), float(popl_adult), q)
+        return risk;
+
+
 class GraphiteClient:
     def put_event(s, event):
         sensor_string="events.%s.%s:%d|c"%(event.ip.replace(".", "_"),event.name,event.value)
@@ -115,8 +172,33 @@ class DBClient:
         s.cnx.commit()
 
     def risc1_1(s, id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo):
-	add_1_1=("INSERT INTO Underground_water_skin (Elem_ID, Concentration, Child_Time, Adult_Time, Child_Cases, Adult_Cases, Duration, Child_Count, Adult_Count) VALUES (%d,%lf,%lf,%lf,%d,%d,%lf,%d,%d)")
-        s.cursor.execute(add_1_1,id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo)
+        add_1_1=("INSERT INTO Underground_water_skin (Elem_ID, Concentration, Child_Time, Adult_Time, Child_Cases, Adult_Cases, Duration, Child_Count, Adult_Count) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+        s.cursor.execute(add_1_1, (id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo))
+        s.cnx.commit()
+
+    def risc1_2(s, id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo):
+        add_1_2=("INSERT INTO Underground_water_peros (Elem_ID, Concentration, Child_Time, Adult_Time, Child_Cases, Adult_Cases, Duration, Child_Count, Adult_Count) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+        s.cursor.execute(add_1_2, (id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo))
+        s.cnx.commit()
+
+    def risc2_1(s, id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo):
+        add_2_1=("INSERT INTO Surface_water_skin (Elem_ID, Concentration, Child_Time, Adult_Time, Child_Cases, Adult_Cases, Duration, Child_Count, Adult_Count) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+        s.cursor.execute(add_2_1, (id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo))
+        s.cnx.commit()
+
+    def risc2_2(s, id, conc, ChCa, AdCa, Dur, ChCo, AdCo):
+        add_2_2=("INSERT INTO Surface_water_peros (Elem_ID, Concentration, Child_Cases, Adult_Cases, Duration, Child_Count, Adult_Count) VALUES (%s,%s,%s,%s,%s,%s,%s)")
+        s.cursor.execute(add_2_2, (id, conc, ChCa, AdCa, Dur, ChCo, AdCo))
+        s.cnx.commit()
+
+    def risc3_1(s, id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo):
+        add_3_1=("INSERT INTO Ground_skin (Elem_ID, Concentration, Child_Time, Adult_Time, Child_Cases, Adult_Cases, Duration, Child_Count, Adult_Count) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+        s.cursor.execute(add_3_1, (id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo))
+        s.cnx.commit()
+
+    def risc3_2(s, id, conc, ChCa, AdCa, Dur, ChCo, AdCo):
+        add_3_2=("INSERT INTO Ground_peros (Elem_ID, Concentration, Child_Cases, Adult_Cases, Duration, Child_Count, Adult_Count) VALUES (%s,%s,%s,%s,%s,%s,%s)")
+        s.cursor.execute(add_3_2, (id, conc, ChCa, AdCa, Dur, ChCo, AdCo))
         s.cnx.commit()
 
     def __init__(s,config):
