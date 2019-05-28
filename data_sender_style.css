@@ -30,7 +30,17 @@ body {font-family: Times New Roman;}
 	left: 90%;
 }
 
+.result {
+  height: 100px;
+  width: 100px;
+  border: 5;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  text-align: left; 
+  
+  background: #F0F8F0;
+  border-radius: 10px;
 
+}
 
 /* Style the tab */
 .tab {

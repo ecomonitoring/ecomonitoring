@@ -40,8 +40,17 @@ function openEnviroment(evt, enviromentName) {
 
 function data_sender(id, url) {
 	var data=data_former(id);
-	console.log(data);
-	sender(data,url);
+	var sdata=JSON.stringify(data);
+	console.log(sdata);
+	sender(sdata,url);
+	form_clear(id);
+
+	return;
+}
+
+function form_clear(id) {
+	var form=document.getElementById(id);
+	form.reset();
 	return;
 }
 
@@ -57,19 +66,14 @@ function sender(data, url) {
 	x.send(data);
 	}
 
-function data_cheker(dict, id){
-
-  return 0;
-}
-
 function data_former(form_id){
 	var form=document.getElementById(form_id);
 	var formData=new FormData(form);
 	var output={};
-	formData.forEach(function(k,v){
+	formData.forEach(function(v,k){
 		output[k]=v;
 		});
-	if (data_cheker(output, form_id)==0)  return output;
+	if (1)  return output;
 	else 
 	{
 		alert("Неправильный ввод данных");
