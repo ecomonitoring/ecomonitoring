@@ -1,6 +1,9 @@
 var inp_id='';
 
 window.onload = function(){
+
+	document.getElementById("request_table").style.visibility = "hidden";
+
 	var search_items=document.getElementById("Elements");
 	var string='';
 	for (var i = 0; i < 856; i++)
@@ -14,10 +17,10 @@ window.onload = function(){
 function Opener(table_id, elem_id)
 {
 	inp_id=elem_id;
-	console.log(inp_id);
+	//console.log(inp_id);
 
-	console.log(document.getElementById('Elements'));
-	console.log(document.getElementById(table_id));
+	//console.log(document.getElementById('Elements'));
+	//console.log(document.getElementById(table_id));
 	document.getElementById(table_id).appendChild( document.getElementById('Elements') );
 
 	document.getElementById("Elements").classList.toggle("show");
@@ -41,7 +44,7 @@ function openEnviroment(evt, enviromentName) {
 function data_sender(id, url) {
 	var data=data_former(id);
 	var sdata=JSON.stringify(data);
-	console.log(sdata);
+	//console.log(sdata);
 	sender(sdata,url);
 	form_clear(id);
 
@@ -56,15 +59,33 @@ function form_clear(id) {
 
 function sender(data, url) {
     var x=new XMLHttpRequest();
+
     x.onreadystatechange=function(){
-        if(this.readystate==4 && this.status==200)
+	if(this.readyState==4 && this.status==200)
 		{
-			alert('Отправлено');
+			alert("ok");
+			//console.log(this.responseText);
+			var recv_data = JSON.parse(this.responseText);
+			console.log(recv_data);
+			document.getElementById("request_table").style.visibility = "visible";
+			document.getElementById(recv_data['pid']).appendChild(document.getElementById("request_table"));
+			//document.getElementById("request_table").style.visibility = "visible";
+			//console.log(recv_data);
+			document.getElementById("p_adult").innerHTML = recv_data["p_adult"];
+			document.getElementById("p_child").innerHTML = recv_data["p_child"];
+			document.getElementById("c_necan").innerHTML = recv_data["c_necan"];
+			document.getElementById("a_necan").innerHTML = recv_data["a_necan"];
+			document.getElementById("p_c_can").innerHTML = recv_data["p_c_can"];
+			document.getElementById("p_a_can").innerHTML = recv_data["p_a_can"];
+			document.getElementById("pop_can").innerHTML = recv_data["pop_can"];
+			document.getElementById("norm_conc").innerHTML = recv_data["norm_conc"][0];
 		}
 	}
-	x.open('PUT',url,true);
-	x.send(data);
-	}
+    x.open('PUT',url,true);
+    x.send(data);
+
+    //console.log(recv_data);
+}
 
 function data_former(form_id){
 	var form=document.getElementById(form_id);
@@ -83,9 +104,10 @@ function data_former(form_id){
 
 function ChooseClose(name, key){
 	var elem_id="Id"+inp_id;
-	console.log(name);
+	//console.log(name);
 	document.getElementById(elem_id).value=key;
 	document.getElementById(inp_id).value=name;
+	document.getElementById("req_elem").innerHTML = name;
 	document.getElementById('Elements').classList.toggle("show");
 }
 
