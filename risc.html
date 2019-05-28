@@ -94,30 +94,7 @@
       <div class="select-arrow"></div> 
     </div> 
     <button class="sender" type="button" onclick="data_sender('11','/add_data/1_1');">Отправить</button> 
-  </form>
-  <table class ="result">
-    <tr>
-      <td> </td>
-      <td>Для ребёнка</td>
-      <td>Для взрослого</td>
-    </tr>
-    <tr>
-      <td>Поглощенная доза</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Индекс опасности неканцерогенного риска</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Индивидуальный канцерогенный риск</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>Канцерогенный риск для населения</td>
-    </tr>
-  </table>
-  
+  </form> 
 
 </div>
     </td>    
@@ -426,6 +403,38 @@
 </div>
 
       <div id="Elements" class="dropdown-content">    </div>
+
+  <table class ="result" id="request_table">
+    <tr>
+        <td id="req_elem"> </td>
+        <td>Для ребёнка</td>
+        <td>Для взрослого</td>
+    </tr>
+    <tr>
+        <td>Поглощенная доза</td>
+        <td id="p_child"></td>
+	<td id="p_adult"></td>
+    </tr>
+    <tr>
+        <td>Индекс опасности неканцерогенного риска</td>
+        <td id="c_necan"></td>
+	<td id="a_necan"></td>
+    </tr>
+    <tr>
+        <td>Индивидуальный канцерогенный риск</td>
+        <td id="p_c_can"></td>
+	<td id="p_a_can"></td>
+    </tr>
+    <tr>
+        <td>Канцерогенный риск для населения</td>
+	<td id="pop_can" style="width:200"> </td>
+    </tr>
+    <tr>
+        <td>Нормальная концентрация вещества</td>
+	<td id="norm_conc" style="width:200;"></td>
+    </tr>
+  </table>
+
 
 </body>
 </html>

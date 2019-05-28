@@ -30,7 +30,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         for (value) in cursor:
             data["norm_conc"] = value
-            print value
+            #print value
 
         s.send_response(200)
         s.send_header("Content-type", "application/json")
@@ -51,6 +51,10 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 b = json.loads(a)
                 event = Event(b,s.client_address[0])
                 data_processor.put_event(event)
+                s.send_response(200)
+                s.send_header("Content-type", "text/html")
+                s.end_headers()
+
 
             elif s.path == "/add_data/1_1":
                 len = int(s.headers.getheader('content-length'))
@@ -66,7 +70,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 a = s.rfile.read(len)
                 data = json.loads(a)
                 DB.risc1_2(data['elem_id'], data['concentration'], data['ir_child'], data['ir_adult'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
-                r = counter(1, 2, data['concentration'], data['et_child'], data['et_adult'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
+                r = counter(1, 2, data['concentration'], data['ir_child'], data['ir_adult'], data['ef_child'], data['ef_adult'], data['ed'], data['popl_child'], data['popl_adult'])
                 r['pid'] = "div1_2"
                 s.send_answer(r, data['elem_id'])
 
@@ -108,13 +112,13 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
             else:
                 raise "error"
-            s.send_response(200)
-            s.send_header("Content-type", "text/html")
-            s.end_headers()
         except:
             s.process_error()
 
     def do_GET(s):
+        if s.path == "/get_risk":
+            s.send_answer()
+        
         fname = s.path.split('/')[-1]
         with open(fname, "r") as file:
             s.send_response(200)
@@ -177,7 +181,7 @@ class DBClient:
         s.cnx.commit()
 
     def risc1_2(s, id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo):
-        add_1_2=("INSERT INTO Underground_water_peros (Elem_ID, Concentration, Child_Time, Adult_Time, Child_Cases, Adult_Cases, Duration, Child_Count, Adult_Count) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+        add_1_2=("INSERT INTO Underground_water_peros (Elem_ID, Concetration, Child_Time, Adult_Time, Child_Cases, Adult_Cases, Duration, Child_Count, Adult_Count) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)")
         s.cursor.execute(add_1_2, (id, conc, ChTm, AdTm, ChCa, AdCa, Dur, ChCo, AdCo))
         s.cnx.commit()
 

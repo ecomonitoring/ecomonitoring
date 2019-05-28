@@ -62,25 +62,25 @@ def Count(a,b,concentration,et_child,et_adult,ef_child,ef_adult,ed,popl_child,po
             c_adult_nekan = q.ingestwat(concentration,ir_wat,ef_adult,ed,bw_adult,at_nekan)
     elif (a == 3):
         if b == 1:
-            c_child_kan = q.dermsoil(concentration,et_child,ef_child,ed,bw_child,at_kan)
-            c_adult_kan = q.dermsoil(concentration,et_adult,ef_adult,ed,bw_adult,at_kan)
-            c_child_nekan = q.dermsoil(concentration,et_child,ef_child,ed,bw_child,at_nekan)
-            c_adult_nekan = q.dermsoil(concentration,et_adult,ef_adult,ed,bw_adult,at_nekan)
+            c_child_kan = q.dermsoil(concentration,16,et_child,ef_child,ed,bw_child,at_kan)
+            c_adult_kan = q.dermsoil(concentration,20,et_adult,ef_adult,ed,bw_adult,at_kan)
+            c_child_nekan = q.dermsoil(concentration,16,et_child,ef_child,ed,bw_child,at_nekan)
+            c_adult_nekan = q.dermsoil(concentration,20,et_adult,ef_adult,ed,bw_adult,at_nekan)
     else:
         c_child_kan = q.ingestsoil(concentration,ir_child_soil,ef_child,ed,bw_child,at_kan)
         c_adult_kan = q.ingestsoil(concentration,ir_adult_soil,ef_adult,ed,bw_adult,at_kan)
         c_child_nekan = q.ingestsoil(concentration,ir_child_soil,ef_child,ed,bw_child,at_nekan)
         c_adult_nekan = q.ingestsoil(concentration,ir_adult_soil,ef_adult,ed,bw_adult,at_nekan)
 
-    p_child = str(c_child_kan+c_child_nekan)
-    p_adult = str(c_adult_kan+c_adult_nekan)
+    #p_child = (c_child_kan+c_child_nekan)
+    #p_adult = (c_adult_kan+c_adult_nekan)
     #print('Поглощенная доза (для ребенка/взрослого)                        '+p_child+' / '+p_adult)
     #print(p_child +' / '+p_adult)
 
     output ={}
 
-    output["p_chld"]=p_child
-    output["p_adult"]=p_adult
+    output["p_child"]= (c_child_kan+c_child_nekan)
+    output["p_adult"]= (c_adult_kan+c_adult_nekan)
 
     if b == 1:
         rd = rd_skin
@@ -90,8 +90,8 @@ def Count(a,b,concentration,et_child,et_adult,ef_child,ef_adult,ed,popl_child,po
     #s1 = 'Индекс опасности неканцерогенного риска (для ребенка/взрослого) '+str(q.DI(c_child_nekan, rd))+' / '+str(q.DI(c_adult_nekan, rd));
     #print(str(q.DI(c_child_nekan, rd))+' / '+str(q.DI(c_adult_nekan, rd))
     
-    output["c_necan"]= str(q.DI(c_child_nekan, rd))
-    output["a_necan"]= str(q.DI(c_adult_nekan, rd))
+    output["c_necan"]= (q.DI(c_child_nekan, rd))
+    output["a_necan"]= (q.DI(c_adult_nekan, rd))
 
     if b == 1:
         cpf = cpf_skin
@@ -101,8 +101,8 @@ def Count(a,b,concentration,et_child,et_adult,ef_child,ef_adult,ed,popl_child,po
     #s2='Индивидуальный канцерогенный риск (для ребенка/взрослого)       '+str(q.ICR(c_child_kan,cpf))+' / '+str(q.ICR(c_adult_kan,cpf));
     #print(str(q.ICR(c_child_kan,cpf))+' / '+str(q.ICR(c_adult_kan,cpf))
     
-    output["p_c_can"]= str(q.ICR(c_child_kan,cpf))
-    output["p_a_can"]= str(q.ICR(c_adult_kan,cpf))
+    output["p_c_can"]= (q.ICR(c_child_kan,cpf))
+    output["p_a_can"]= (q.ICR(c_adult_kan,cpf))
     
     #f = q.DL(popl_child,q.ICR(c_child_kan,cpf))+q.DL(popl_adult,q.ICR(c_adult_kan,cpf));
     #s3 = 'Канцерогенный риск для населения'+str(f);
