@@ -33,14 +33,27 @@ body {font-family: Times New Roman;}
 .result {
   height: 100px;
   width: 100px;
-  border: 5;
+  border: 2px solid black;
+  border-color: black;
+  border-collapse: collapse;
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  text-align: left; 
-  
+  text-align: center; 
   background: #F0F8F0;
-  border-radius: 10px;
+  border-radius: 20px;
 
 }
+
+.result td, th {
+  padding: 3px; /* Поля вокруг содержимого таблицы */
+  border: 1px solid black;
+  border-bottom: 0px solid black;
+  vertical-align: middle;
+}
+
+.result tbody tr:nth-child(2) {
+	border-bottom: 0px solid black;
+}
+
 
 /* Style the tab */
 .tab {
@@ -66,7 +79,6 @@ body {font-family: Times New Roman;}
   border-right: 2px solid #000000;
   border-bottom: 2px solid #000000;
   border-radius: 3px;
-  
   outline: none;
   cursor: pointer;
   padding: 14px 16px;
@@ -125,7 +137,7 @@ label{
   margin-left: 20px;
 }
 
-table {
+.contentTable {
 font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 text-align: left;
 border-collapse: collapse;

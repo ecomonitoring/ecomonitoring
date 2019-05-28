@@ -63,7 +63,7 @@ function sender(data, url) {
     x.onreadystatechange=function(){
 	if(this.readyState==4 && this.status==200)
 		{
-			alert("ok");
+			//alert("ok");
 			//console.log(this.responseText);
 			var recv_data = JSON.parse(this.responseText);
 			console.log(recv_data);

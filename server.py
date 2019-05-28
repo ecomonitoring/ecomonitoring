@@ -35,7 +35,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.send_response(200)
         s.send_header("Content-type", "application/json")
         s.end_headers()
-        print json.dumps(data)
+        #print json.dumps(data)
         s.wfile.write(json.dumps(data))
 
         cursor.close()
