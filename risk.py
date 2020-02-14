@@ -90,8 +90,9 @@ def Count(a,b,concentration,et_child,et_adult,ef_child,ef_adult,ed,popl_child,po
 
     output ={}
 
-    output["p_child"]= ('%.4e'%(c_child_kan+c_child_nekan))
-    output["p_adult"]= ('%.4e'%(c_adult_kan+c_adult_nekan))
+    output["p_child"]= str((c_child_kan+c_child_nekan, 3))
+    output["p_adult"]= str((c_adult_kan+c_adult_nekan, 3))
+
 
     if b == 1:
         rd = rd_skin
@@ -101,8 +102,10 @@ def Count(a,b,concentration,et_child,et_adult,ef_child,ef_adult,ed,popl_child,po
     #s1 = 'Индекс опасности неканцерогенного риска (для ребенка/взрослого) '+str(q.DI(c_child_nekan, rd))+' / '+str(q.DI(c_adult_nekan, rd));
     #print(str(q.DI(c_child_nekan, rd))+' / '+str(q.DI(c_adult_nekan, rd))
     
-    output["c_necan"]= ('%.4e'%(q.DI(c_child_nekan, rd)))
-    output["a_necan"]= ('%.e'%(q.DI(c_adult_nekan, rd)))
+
+    output["c_necan"]= str((q.DI(c_child_nekan, rd), 3))
+    output["a_necan"]= str((q.DI(c_adult_nekan, rd), 3))
+
 
     if b == 1:
         cpf = cpf_skin
@@ -113,15 +116,18 @@ def Count(a,b,concentration,et_child,et_adult,ef_child,ef_adult,ed,popl_child,po
     #s2='Индивидуальный канцерогенный риск (для ребенка/взрослого)       '+str(q.ICR(c_child_kan,cpf))+' / '+str(q.ICR(c_adult_kan,cpf));
     #print(str(q.ICR(c_child_kan,cpf))+' / '+str(q.ICR(c_adult_kan,cpf))
     
-    output["p_c_can"] = ('%.4e'%(q.ICR(c_child_kan,cpf)))
-    output["p_a_can"] = ('%.4e'%(q.ICR(c_adult_kan,cpf)))
+
+    output["p_c_can"]= str((q.ICR(c_child_kan,cpf), 3))
+    output["p_a_can"]= str((q.ICR(c_adult_kan,cpf), 3))
+
     
     #f = q.DL(popl_child,q.ICR(c_child_kan,cpf))+q.DL(popl_adult,q.ICR(c_adult_kan,cpf));
     #s3 = 'Канцерогенный риск для населения'+str(f);
     #print(str(f))
 
-    output["pop_can"] = ('%.4e'%(q.DL(popl_child,q.ICR(c_child_kan,cpf))+q.DL(popl_adult,q.ICR(c_adult_kan,cpf))))
-    output["assessment_can"] = assessment(q.DL(popl_child,q.ICR(c_child_kan,cpf))+q.DL(popl_adult,q.ICR(c_adult_kan,cpf)))
+
+    output["pop_can"]= str((q.DL(popl_child,q.ICR(c_child_kan,cpf))+q.DL(popl_adult,q.ICR(c_adult_kan,cpf)), 3))
+
     return output
 
 

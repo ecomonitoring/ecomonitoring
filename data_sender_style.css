@@ -35,15 +35,19 @@ body {font-family: Times New Roman;}
   //display: none
   //height: 100px;
   width: 100px;
-  border: 4px solid black;
+  border: 2px solid black;
   border-color: black;
   border-collapse: collapse;
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   text-align: center; 
-  background: #f8f8ff;
-  border-radius: 0px;
+  background: #F0F8F0;
+  border-radius: 20px;
+}
+
+.result td {
   color: #3f3f3f;
 }
+
 
 .result td, th {
   padding: 3px; /* Поля вокруг содержимого таблицы */
@@ -52,9 +56,6 @@ body {font-family: Times New Roman;}
   vertical-align: middle;
 }
 
-.result td {
-  color: #3f3f3f;
-}
 
 .result tbody tr:nth-child(2) {
 	border-bottom: 0px solid black;
