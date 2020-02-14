@@ -66,7 +66,7 @@ function sender(data, url) {
 			//alert("ok");
 			//console.log(this.responseText);
 			var recv_data = JSON.parse(this.responseText);
-			console.log(recv_data);
+			console.log(recv_data)
 			document.getElementById("request_table").style.visibility = "visible";
 			document.getElementById(recv_data['pid']).appendChild(document.getElementById("request_table"));
 			//document.getElementById("request_table").style.visibility = "visible";
@@ -78,7 +78,24 @@ function sender(data, url) {
 			document.getElementById("p_c_can").innerHTML = recv_data["p_c_can"];
 			document.getElementById("p_a_can").innerHTML = recv_data["p_a_can"];
 			document.getElementById("pop_can").innerHTML = recv_data["pop_can"];
-			document.getElementById("norm_conc").innerHTML = recv_data["norm_conc"][0];
+			as_can = document.getElementById("assessment_can");
+			if (recv_data["assessment_can"] == 1) {
+				as_can.innerHTML='<font color=#4cbb17>Допустимо</font>';
+			}
+			if (recv_data["assessment_can"] == 2) {
+				as_can.innerHTML='<font color=#808000>Низкий</font>';
+			}
+			if (recv_data["assessment_can"] == 3) {
+				as_can.innerHTML='<font color=#ffff00>Средний</font>';
+			}
+
+			if (recv_data["assessment_can"] == 4) {
+				as_can.innerHTML='<font color=#ff6600>Высокий</font>';
+			}
+
+			if (recv_data["assessment_can"] == 5) {
+				as_can.innerHTML='<font color=#ff0000>Чрезвычайно опасный</font>';
+		        }
 		}
 	}
     x.open('PUT',url,true);

@@ -7,7 +7,7 @@ body {font-family: Times New Roman;}
   margin-left: -1%;
   width: 101.6%;
   height: 75px;
-  background: #20B2AA;
+  background: #0148ba;
   text-align: center;
   border-bottom: 4px solid;
 }
@@ -31,7 +31,9 @@ body {font-family: Times New Roman;}
 }
 
 .result {
-  height: 100px;
+  align: center;
+  //display: none
+  //height: 100px;
   width: 100px;
   border: 2px solid black;
   border-color: black;
@@ -40,8 +42,12 @@ body {font-family: Times New Roman;}
   text-align: center; 
   background: #F0F8F0;
   border-radius: 20px;
-
 }
+
+.result td {
+  color: #3f3f3f;
+}
+
 
 .result td, th {
   padding: 3px; /* Поля вокруг содержимого таблицы */
@@ -49,6 +55,7 @@ body {font-family: Times New Roman;}
   border-bottom: 0px solid black;
   vertical-align: middle;
 }
+
 
 .result tbody tr:nth-child(2) {
 	border-bottom: 0px solid black;
@@ -61,7 +68,7 @@ body {font-family: Times New Roman;}
   width: 101.6%;
   overflow: hidden;
   border: 0px solid #ccc;
-  background-color: #1faee9;
+  background-color: #015b19;
 }
 
 .tab p {
@@ -73,13 +80,14 @@ body {font-family: Times New Roman;}
 
 /* Style the buttons inside the tab */
 .tab button {
-  background-color: #138abd;
+  background-color: #0148ba;
   float: left;
   border-top: 2px solid #000000;
   border-right: 2px solid #000000;
   border-bottom: 2px solid #000000;
   border-radius: 3px;
   outline: none;
+  color:#f7cdf2; 
   cursor: pointer;
   padding: 14px 16px;
   transition: 0.3s;
@@ -88,12 +96,12 @@ body {font-family: Times New Roman;}
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-  background-color: #ddd;
+  background-color: #42acbf;
 }
 
 /* Create an active/current tablink class */
 .tab button.active {
-  background-color: #ccc;
+  background-color: #42acff;
 }
 
 /* Style the tab content */
@@ -104,7 +112,7 @@ body {font-family: Times New Roman;}
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-top: none;
-  background-color:#F0F8FF;
+  background-color:#d0edd1;
 }
 
 /* Style the close button */
@@ -150,18 +158,18 @@ th {
 font-size: 22px;
 font-weight: 300;
 padding: 12px 10px;
-border-bottom: 2px solid #F56433;
-color: #F56433;
+border-bottom: 2px solid #67028e;
+color: #3f3f3f;
 
 }
 
 tbody tr:nth-child(2) {
-border-bottom: 2px solid #F56433;
+border-bottom: 2px solid #67028e;
 }
 
 td {
 padding: 10px;
-color: #8D8173;
+color: #3f3f3f;
 vertical-align: top;
 }
 
@@ -170,12 +178,12 @@ vertical-align: top;
   margin-bottom:7%;
   height:30px;
   width:100px;
-  background-color:#F56433;
+  background-color:#16ad31;
   border:none;
   border-radius:5px;
 }
 
-.sender:hover{background-color:#cc0605;}
+.sender:hover{background-color: #096d02;}
 
 #myInput:focus {outline: 3px solid #ddd;}
 
