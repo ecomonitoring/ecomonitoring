@@ -208,7 +208,7 @@ class DBClient:
     def __init__(s,config):
         s.cnx = mysql.connector.connect(user=config.user,database=config.database,password=config.password,host=config.host)
         s.cursor =s.cnx.cursor()
-        s.add_event=("INSERT INTO events (value,sensor,date_time,IP) VALUES (%s,%s,%s,%s)")
+        s.add_event=("INSERT INTO events (value,sensor,date_time,IP, id) VALUES (%s,%s,%s,%s,%s)")
         print("DB connectin-OK\n")
 
     def close(s):
@@ -222,9 +222,10 @@ class Event:
         s.ip = IP
         s.name = lib["sensor"]
         s.value = lib["value"]
+        s.id = lib["id"]
         s.sensors = {'temperature':1,'pressure':2,'illumination':3,'humidity':4,'noise':5,'geiger':6,'gases':7}
-        s.timestamp=time.asctime()
-        s.event_data=(s.value,s.sensors[s.name],s.timestamp,s.ip)
+        s.timestamp = time.asctime()
+        s.event_data = (s.value, s.sensors[s.name], s.timestamp, s.ip, s.id)
 
 class DataProcessor:
     def __init__(s):

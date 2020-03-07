@@ -1,17 +1,18 @@
+//===== КОНСТАНТЫ ======
+#define BOX_ID "'001'"
 //======== ПИНЫ ========
 #define MQ135_ANALOG A0
-#define MQ135_HEATER 4
+#define MQ135_HEATER 5
 
-#define DHT11_PIN 2
+#define DHT11_PIN 8
 
 #define GY_65 0x77
 #define GY_30 0x23
-      //Общий анод
-#define red   9
+//Общий анод
+/*#define red   9
 #define green 10
 #define blue  11
-//===== КОНСТАНТЫ ======
-
+*/
 //===== БИБЛИОТЕКИ =====
 #include "GyverRGB.h"
 #include "GyverButton.h"
@@ -22,22 +23,22 @@
 #include "Wire.h"
 //======= ОБЪЕКТЫ =======
 Adafruit_BMP085 bmp;
-GRGB led(red, green, blue);
+//GRGB led(red, green, blue);
 DHT dht(DHT11_PIN);
 MQ135 mq(MQ135_ANALOG, MQ135_HEATER);
 BH1750 light(GY_30);
 
 //======= ГЛОБАЛЫ =======
-int rt=millis();
-int color=0;
+unsigned long int rt=millis();
+//int color=0;
 
 
 void setup()
 {
-  led.setDirection(REVERSE);
-  led.setBrightness(10); 
+  //led.setDirection(REVERSE);
+  //led.setBrightness(10); 
   
-  uart.begin(9600);
+  uart.begin(115200);
 
   bmp.begin();
   light.begin(BH1750_AUTO_MODE);
@@ -52,37 +53,51 @@ void setup()
   while(!mq.heatingCompleted()) {;}
   mq.calibrate(100);
   
-  led.colorWheel(color);
+  //led.colorWheel(color);
 }
 
 void loop()
 {
-//===== RGB =========
+/*/===== RGB =========
     color = (color+50)%1531;
     led.colorWheel(color);
-  
-  String json="{";
+*/
 //===== DHT ==========
-  json += "'temperature':";
   dht.read();
-  json += (String) dht.getTemperatureC();
-  json += ", 'humidity':";
-  json += (String) dht.getHumidity();
+  if(dht.getState()==DHT_OK)
+  {
+    uart.print(F("{'sensor':'temperature', 'value':"));
+    uart.print(dht.getTemperatureC());
+    uart.print(F(", 'id':"));
+    uart.print(BOX_ID);
+    uart.print(F("}"));
+    uart.print(F("{'sensor':'humidity', 'value':"));
+    uart.print(dht.getHumidity());
+    uart.print(F(", 'id':"));
+    uart.print(BOX_ID);
+    uart.print(F("}"));
+  }
   
 //===== BMP ============
-  json += ", 'pressure':";
-  json += (String) bmp.readPressure();
-
+  uart.print(F("{'sensor':'pressure', 'value':"));
+  uart.print(bmp.readPressure());
+  uart.print(F(", 'id':"));
+  uart.print(BOX_ID);
+  uart.print(F("}"));
 //===== GY-30 ===========
-  json += ", 'light':";
-  json += (String)light.readLightLevel();
-
+  uart.print(F("{'sensor':'illumination', 'value':"));
+  uart.print(light.readLightLevel());
+  uart.print(F(", 'id':"));
+  uart.print(BOX_ID);
+  uart.print(F("}"));
+  
 //===== MQ-135 ==========
-  json += ", 'CO2':";
-  json += (String)mq.readCO2(dht.getTemperatureC(), dht.getHumidity());
-
-  json += "};";
-
-  uart.println(json);
+  uart.print(F("{'sensor':'gases', 'value':"));
+  uart.print((String)mq.readCO2(dht.getTemperatureC(), dht.getHumidity()));
+  uart.print(F(", 'id':"));
+  uart.print(BOX_ID);
+  uart.print(F("}"));
+//  uart.print();
+  uart.println(F("END"));
   delay(1000);
 }
